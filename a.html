@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation Crypto</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="cryptoChart"></canvas>
+
+    <script>
+        const ctx = document.getElementById('cryptoChart').getContext('2d');
+
+        // Fonction pour générer une courbe de crypto réaliste
+        function generateCryptoData(length, startPrice = 100) {
+            let data = [];
+            let price = startPrice;
+
+            for (let i = 0; i < length; i++) {
+                let variation = (Math.random() - 0.5) * 5; // Variation aléatoire entre -2.5% et +2.5%
+                price += variation;
+                data.push(price);
+            }
+            return data;
+        }
+
+        let labels = Array.from({ length: 50 }, (_, i) => i); // 50 points sur l'axe X
+        let prices = generateCryptoData(50);
+
+        // Initialisation du graphique
+        const cryptoChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Prix du BTC',
+                    data: prices,
+                    borderColor: 'green',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Temps' } },
+                    y: { title: { display: true, text: 'Prix' } }
+                }
+            }
+        });
+
+        // Fonction pour mettre à jour le graphique en temps réel
+        function updateChart() {
+            let lastPrice = prices[prices.length - 1];
+            let newPrice = lastPrice + (Math.random() - 0.5) * 5; // Variation aléatoire
+            prices.push(newPrice);
+            labels.push(labels.length); // Ajoute un nouveau point de temps
+
+            if (prices.length > 50) {
+                prices.shift();
+                labels.shift();
+            }
+
+            cryptoChart.update();
+        }
+
+        setInterval(updateChart, 1000); // Met à jour toutes les secondes
+    </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+[
+    { "name": "BTC", "Fx": "Math.sin(t) * 20 + 100" },
+    { "name": "ETH", "Fx": "Math.cos(t) * 30 + 150" }
+]
